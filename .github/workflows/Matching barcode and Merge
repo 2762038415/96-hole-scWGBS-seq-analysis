@@ -1,0 +1,31 @@
+#创建文件夹以存放首次比对barcode的输出结果
+
+mkdir fastq_multx_output-1
+....../fastq-multx -B barcode.txt -m 1 -b itaq.1.fastq itaq.2.fastq -o %.R1.fastq -o %.R2.fastq
+
+#因为桥式PCR测序过程中双端序列方向不一定一致，因此需要颠倒两测序文件进行二次拆分
+#创建第二个文件夹以存放比对颠倒过的barcode的输出结果
+
+mkdir fastq_multx_output-2
+....../fastq-multx -B barcode.txt -m 1 -b itaq.2.fastq itaq.1.fastq -o %.R1.fastq -o %.R2.fastq
+
+# 合并两次拆分的结果
+
+mkdir fastq_multx_output
+
+for i in `ls fastq_multx_output-1/itaq*.R1.fastq`; do 
+      a=${i/.R1.fastq/}; 
+      a=${a/*\//}; 
+      echo "$a"; 
+done > sample.list
+
+for i in `cat sample.list`; do 
+      echo "cat fastq_multx_output-1/$i.R1.fastq fastq_multx_output-2/$i.R2.fastq > ./fastq_multx_output/$i.R1.fastq"; 
+done > command.combine.R1.list
+for i in `cat sample.list`; do 
+      echo "cat fastq_multx_output-1/$i.R2.fastq fastq_multx_output-2/$i.R1.fastq > ./fastq_multx_output/$i.R2.fastq"; 
+done > command.combine.R2.list
+
+#执行R1、R2文件合并命令
+sh command.combine.R1.list
+sh command.combine.R2.list
