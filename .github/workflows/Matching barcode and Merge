@@ -13,7 +13,7 @@ mkdir fastq_multx_output-2
 
 mkdir fastq_multx_output
 
-for i in `ls fastq_multx_output-1/itaq*.R1.fastq`; do 
+for i in `ls fastq_multx_output-1/ *.R1.fastq`; do 
       a=${i/.R1.fastq/}; 
       a=${a/*\//}; 
       echo "$a"; 
