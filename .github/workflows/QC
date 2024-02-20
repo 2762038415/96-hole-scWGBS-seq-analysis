@@ -2,8 +2,8 @@
 #$ -N fastp
 
 # 设定fastq文件所在的目录和输出路径
-fastq_dir="your fastq files path"
-output_dir="your files output path"
+fastq_dir="${your fastq files path}"
+output_dir="${your files output path}"
 
 # 循环处理96个样本
 for row in {A..H}; do
