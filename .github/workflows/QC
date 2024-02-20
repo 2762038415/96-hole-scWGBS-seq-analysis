@@ -1,0 +1,22 @@
+#!/bin/bash
+#$ -N fastp
+
+# 设定fastq文件所在的目录和输出路径
+fastq_dir="your fastq files path"
+output_dir="your files output path"
+
+# 循环处理96个样本
+for row in {A..H}; do
+    for col in {1..12}; do
+        sample="${row}${col}"
+        echo "Processing sample ${sample}..."
+
+        # 执行质控操作，这里使用fastp进行质控
+        fastp -i "${fastq_dir}/${sample}.R1.fastq" \
+              -I "${fastq_dir}/${sample}.R2.fastq" \
+              -o "${output_dir}/${sample}.clean_R1.fastq" \
+              -O "${output_dir}/${sample}.clean_R2.fastq"
+
+        echo "Sample ${sample} processed."
+    done
+done
