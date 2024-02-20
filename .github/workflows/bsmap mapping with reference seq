@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# 设定fastq文件所在的目录和参考基因组文件,这一步是进行质控后的文件
+fastq_dir="${your files path after QC}"
+reference_genome="${your reference gene path}"
+bsmapoutput_dir="${where would you want to output your basmap results}"
+
+# 循环处理96个样本
+for row in {A..H}; do
+    for col in {1..12}; do
+        sample="${row}${col}"
+        echo "Processing sample ${sample}..."
+
+        # 执行比对操作，这里使用bsmap进行比对,-p 8表示线程数
+        bsmap -a ${fastq_dir}/${sample}.clean_R1.fastq -b ${fastq_dir}/${sample}.clean_R2.fastq -d ${reference_genome} -o ${bsmapoutput_dir}/${sample}.aligned.sam -p 8
+
+        echo "Sample ${sample} aligned.sam"
+    done
+done
